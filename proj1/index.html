@@ -38,9 +38,16 @@
 
 <h3 align="middle">Part 1: Rasterizing single-color triangles</h3>
 
-<p>To rasterize a triangle, we go through each pixel within the triangle bounding box, and then perform the 3-line test on the center of the pixel (flooring the coordinates and adding 0.5). If the center point lies within the triangle, or if it doesn’t lie “inside” any of the lines (and thus inverted), we continue with rasterizing the point (calling the rasterize_point function). 
-  Our algorithm is no worse than one that checks each sample within the bounding box of the triangle because we only check pixels within the range of the min and max x coordinates and min and max y coordinates. This keeps the check within the bounding box of the triangle.</p>  
-
+<p>In this task we enable rasterizing of single triangles of constant color which can be composed to rasterize more complex shapes. 
+   Given 3 pixel coordinates to rasterize a triangle, we first determine the smallest bounding box that contains the entire triangle within the sample buffer. 
+   We then go through each pixel within the triangle bounding box, and then perform the 3-line test on the center of the pixel (flooring the coordinates and offsetting by 0.5). 
+   The center point is considered to be inside or on the triangle if the 3-line test determines the point is inside all of the lines or “outside” all of the lines (inverted case). 
+   If the point is valid, we continue with rasterizing the point (calling the rasterize_point function), which maps the pixel in the sample buffer with the specified color. 
+<br>
+Our algorithm is no worse than one that checks each sample within the bounding box of the triangle because we only check pixels within the range of the 
+  minimum and maximum x coordinates and minimum and maximum y coordinates. This keeps the check within the bounding box of the triangle.
+ </p>
+ <br>
 <div align="middle">
   <table style="width=100%">
     <tr>
@@ -51,7 +58,9 @@
     </tr>
   </table>
 </div>
-
+  
+<br>
+<br>
 <h3 align="middle">Part 2: Antialiasing triangles</h3>
 
 <p><b>Data Structures:</b> We updated the <i>sample_buffer</i> to hold <i>height * width * sample_rate colors</i>, enabling us to store the color information of every single super sample. </p>
