@@ -82,7 +82,7 @@ Our algorithm is no worse than one that checks each sample within the bounding b
     <i>rasterize_point</i> actually maps to <i>sample_rate</i> number of pixels in the <i>sample_buffer</i>, so we modified <i>fill_pixel</i> to correctly
     fill in all the necessary pixels based on the <i>sampling_rate</i>.</li>
   <li>Finally, in <i>resolve_to_framebuffer</i>, we need to map our supersampled pixels back into the single pixel that actually maps to the 
-    <i>framebuffer</i>. To do this, we iterate over the pixels of the <i>framebuffer</i> and pick out the <i>sample_rate<i> number of pixels in the 
+    <i>framebuffer</i>. To do this, we iterate over the pixels of the <i>framebuffer</i> and pick out the <i>sample_rate</i> number of pixels in the 
     <i>sample_buffer</i> associated with the pixel. We then average the color of all these subsamples to set the pixel color of the <i>framebuffer</i>.</li>
   </ol></p>
   <p>For lines and points, supersampling won’t change anything since it is not implemented (i.e. all subsamples are the same color), but supersampling 
@@ -147,7 +147,7 @@ Our algorithm is no worse than one that checks each sample within the bounding b
     
   <p>In this task, we implemented pixel transformations including translation, scaling, and rotation. As a demonstration, we rendered the given 
     cubeman with some modifications. We gave the cubeman a fancy shirt and a hat, and had him dance with one arm up and one arm down, picking up 
-    one leg, bent at the knee.</p>
+    one leg, bent at the knee, which we achieved by rotating and translating some of his limbs.</p>
   
 <br>
 <br>   
@@ -155,9 +155,13 @@ Our algorithm is no worse than one that checks each sample within the bounding b
 
 <h3 align="middle">Part 4: Barycentric coordinates</h3>
 
-  <p>Barycentric coordinates linearly interpolate values at triangle vertices, assigning weights for each triangle vertex based on which point you are interpolating for (also could be considered proportion calculation). For any point, you can calculate weights of triangle vertices such that alpha, beta, and gamma sum up to 1. This is useful for creating color blends and gradients. 
-  For example, if you look at the image aid of the triangle below, for each point inside the triangle, after calculating the weight for each vertex/color (red, green, and blue) and by combining the weighted colors together, you can get a color that is a gradient between the 3 vertices. In this case, point V has more green and blue in it, and less red, and which will be reflected in the three corresponding alpha, beta, and gamma weights.</p>
-  
+  <p>Barycentric coordinates are weights assigned to describe the location of a point within a triangle and are useful for linearly interpolating for some value at that point, given values at the vertices. Specifically, for a given point, barycentric coordinates are 3 weights that sum to 1 based on the point’s location relative to the triangle’s vertices. 
+  </p>
+  <p>While rasterizing multicolored polygons, this is useful for creating color blends and gradients.</p>
+  <p>For example, if you look at the image aid of the triangle below, for each point inside the triangle, we compute the 3 barycentric coordinates and treat these coordinates as weights for colors at each vertex (red, blue, green). By adding the weighted colors together, you can get a color that is a gradient between the 3 vertices. In this case, point V has more green and blue in it, and less red, and which will be reflected in the three corresponding alpha, beta, and gamma weights.
+  </p>
+  <p>Below is also a full color wheel we rasterized that showcases blending and gradients.</p>
+    
  <div align="middle">
   <table style="width=100%">
     <tr>
