@@ -32,9 +32,12 @@
 <div>
 
 <h2 align="middle">Overview</h2>
-<p>ADD OVERVIEW</p>
-
-<br>
+<p>In this project we began rasterizing images and being able to apply textures to our images. We begin with the most basic building block: rasterizing a single triangle. In task 1, we used 3 line testing to determine if a pixel landed within the triangle we wanted to rasterize. In task 2, we improved our triangle rasterization by implementing supersampling, which enabled us to anti-alias our triangles and make edges smoother.</p>
+  <p>Once we were able to rasterize simple, single colored triangles, we added transformation capabilities so the shapes can be rotated, translated, and scaled as desired. We also implemented barycentric coordinates, which allows us to take any point inside a triangle and assign the appropriate interpolated color based on its location relative to the 3 vertices. This allowed for coloring smooth gradients within the triangle instead of only constant color.</p>
+  <p>Finally, in the last 2 tasks, we apply texture mapping to our triangles to allow even more advanced imaging. We achieved texture mapping by using barycentric coordinates to map the pixel to a point in the texture image, and also improved our texture mapping with different mipmap levels and bilinear filtering. In the end, we now have the ability to use different combinations of pixel sampling, level sampling, or supersampling to improve our image quality.</p>
+  <p>During this project, we learned how to start imaging from the very beginning, and it was very exciting to slowly add more advanced features into our toolbox. We were able to more closely understand how the supersampling, mipmap leveling, and bilinear filtering algorithms work as well in the entire rasterization pipeline. </p>
+  <p>We also encountered and overcame several challenges throughout the process. Some of the early challenges included getting comfortable coding in C++ as it was new to both of us. Additionally, handling edge cases was something we had to consider beyond the algorithms themselves such as points on the edges texture maps, buffer indexing, triangles that were degenerate after applying the appropriate rounding and centering, and finally numerical errors during interpolation. To address many of these challenges we handled them on a case by case basis, while being careful to not decrease the quality of images rendered. For degenerate triangles specifically, we attempted to tackle the roots of problems such as floating point approximation errors that led to non-invertible matrices and divide by zero errors. We also spent a lot of time using the debugger to analyze the data in our buffers to identify the problems.</p>
+ <br>
 <br>
 <h2 align="middle">Section I: Rasterization</h2>
 
