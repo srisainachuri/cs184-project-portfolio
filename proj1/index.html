@@ -226,8 +226,12 @@ Our algorithm is no worse than one that checks each sample within the bounding b
   
 <h3 align="middle">Part 6: "Level sampling" with mipmaps for texture mapping</h3>
 
-  <p>show us four versions of our frog image, using the combinations of L_ZERO and P_NEAREST, L_ZERO and P_LINEAR, L_NEAREST and P_NEAREST, as well as L_NEAREST and P_LINEAR</p>
-  <div align="middle">
+<p>Level sampling is sampling by using textures at different resolutions that may have more or less information. This is done through the use of mipmaps of textures, which are levels of the same texture stores in order of decreasing resolution. Level sampling is helpful for faster rasterization and antialiasing of textures in an image that are further in the view and don’t need higher resolution to be sampled. On the other hand, we may still want to keep the higher resolution levels for sampling parts of the image that are closer in view.</p>
+<p>When there are multiple levels of a texture through a mipmap, we can use sample textures at different levels to optimize the rasterization process. Using these levels is based on the sampling technique. Level 0 sampling simply samples all (u, v) points in the level 0 texture space and does not use any lower resolution levels. Sample nearest will compute which level to sample the texture from, based on the derivatives of screen space to texture space mapping. One further step would be bilinear filtering, which combines sampled texel colors from the 2 nearest mipmap levels by weighting them according to their distance from the interpolated mipmap level.</p>
+<p>When adjusting sampling techniques based on pixel sampling, level sampling, or the number of samples per pixel (sample rate), there are different tradeoffs. While both level sampling/mipmapping and supersampling both are useful for antialiasing, level sampling/mipmapping will have a better performance than supersampling. However, storing a mipmap will take up 4/3 the amount of memory of a single texture map. Based on the sample rate as well, the higher the sample rate, the more memory the sample_buffer will take up. </p>
+<p>Below are four versions of our frog image, using the combinations of L_ZERO and P_NEAREST, L_ZERO and P_LINEAR, L_NEAREST and P_NEAREST, as well as L_NEAREST and P_LINEAR. </p>
+<br>
+<div align="middle">
   <table style="width=100%">
     <tr>
       <td>
@@ -263,6 +267,8 @@ Our algorithm is no worse than one that checks each sample within the bounding b
     </tr>
   </table>
 </div>
+<br>
+<p>As you can see, in both level 0 and level nearest, going from nearest pixel sampling to bilinear sampling creates a more antialiased image, because we are adding the element of bilinear filtering. The smoothest image uses both nearest level and bilinear filtering.</p>
 <br>
 <br>
 
