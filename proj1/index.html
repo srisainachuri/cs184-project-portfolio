@@ -178,11 +178,20 @@ Our algorithm is no worse than one that checks each sample within the bounding b
     </tr>
   </table>
 </div> 
-
+<br>
+<br>
 <h3 align="middle">Part 5: "Pixel sampling" for texture mapping</h3>
 
-  
-<p>screenshots using nearest sampling at 1 sample per pixel, nearest sampling at 16 samples per pixel, bilinear sampling at 1 sample per pixel, and bilinear sampling at 16 samples per pixel.</p>
+  <p>Pixel sampling samples the color at a specific location on another reference image to rasterize points within a triangle. In texture mapping this refers to sampling a texture map to rasterize an image. Since we are only given triangle screen space vertices and its corresponding (u, v) texture space coordinates, for each point within the triangle we can use the barycentric coordinate weights (similar to part 4) to interpolate where a pixel within the triangle maps in the texture space. Based on this mapping, we sample the texture space to then rasterize that pixel according to the color of the texture space pixel. In our implementation these interpolated (u, v) coordinates for each pixel within the triangle were used differently by each of the 2 sampling methods in order to determine the color for the pixel in the screen space. Note that this implementation was built on top of supersampling as well, so screen space mapping technically maps to all the subpixels in our sample buffer based on the sample rate. Additionally, in our implementation to compute the barycentric coordinates, we initially did computations with linear algebra, but later decided to use analytic formulas because we wanted to avoid any floating point rounding issues that may arise when inverting matrices.</p>
+  <p>Once we have the texture space (u, v) coordinates that we would like to sample, there are two pixel sampling methods we can use to obtain the color:</p>
+  <p>
+    <ul>
+      <li>Nearest sampling: Based on the texel that the (u,v) coordinate falls in, directly sample that texel’s color. The texel the point falls in can be obtained by flooring the (u, v) coordinates so it indexes into the mipmap correctly.</li>
+      <li>Bilinear sampling: Bilinear sampling will consider the 4 nearest texels to the (u,v) coordinates (one of which the (u, v) coordinate is inside of), and uses linear interpolations (lerp) to weight the colors of the texels to assign a final color. There are 2 intermediate lerps, which interpolate the colors in the two rows, and then there is a final lerp to interpolate the colors from the two rows.</li>
+    </ul>
+  </p>
+<p>Below, we are comparing four screenshots of the UC Berkeley Seal using nearest sampling at 1 sample per pixel, nearest sampling at 16 samples per pixel, bilinear sampling at 1 sample per pixel, and bilinear sampling at 16 samples per pixel.</p>
+<br>
 <div align="middle">
   <table style="width=100%">
     <tr>
@@ -208,7 +217,10 @@ Our algorithm is no worse than one that checks each sample within the bounding b
     </tr>
   </table>
 </div>
-  
+<br>
+<p>Overall, bilinear sampling produces a much smoother color blending when rendering the image with the texture map and is more pleasant to look at. When viewed through the zoom lens, this is evident especially at a sample rate of 1 where the edges of the letter “B” are sharp and blocky for the nearest sampling while bilinear sampling shows smoother shifts in colors of the pixels, almost similar to the nearest sampling at sampling rate of 16. Overall, these differences are more pronounced at low sample rate, and there is not too much noticeable difference between the sampling methods at a rate of 16. This is because supersampling helps antialias in the screen space when rasterizing into the frame buffer whereas bilinear sampling helps antialias in the texture space when interpolating between the 2 spaces. As a result, when we have no antialiasing at the screen space level at a sample rate of 1, the effects of antialiasing at the texture space level (with bilinear filtering) are much more apparent. </p>
+<br>
+<br>
   
 <h3 align="middle">Part 6: "Level sampling" with mipmaps for texture mapping</h3>
 
