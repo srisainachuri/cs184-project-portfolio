@@ -1,7 +1,133 @@
-<html>
-	<head>
-	</head>
-	<body>
-		Project 1 here
-	</body>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<style>
+  body {
+    padding: 100px;
+    width: 1000px;
+    margin: auto;
+    text-align: left;
+    font-weight: 300;
+    font-family: 'Open Sans', sans-serif;
+    color: #121212;
+  }
+  h1, h2, h3, h4 {
+    font-family: 'Source Sans Pro', sans-serif;
+  }
+</style>
+<title>CS 184 Rasterizer</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link href="https://fonts.googleapis.com/css?family=Open+Sans|Source+Sans+Pro" rel="stylesheet">
+</head>
+
+
+<body>
+
+<h1 align="middle">CS 184: Computer Graphics and Imaging, Spring 2023</h1>
+<h1 align="middle">Project 1: Rasterizer</h1>
+<h2 align="middle">Srisai Nachuri, Maddy Chen, CS184-??</h2>
+
+<br><br>
+
+<div>
+
+<h2 align="middle">Overview</h2>
+<p>Give a high-level overview of what you implemented in this project. Think about what you've built as a whole. Share your thoughts on what interesting things you've learned from completing the project.</p>
+
+<h2 align="middle">Section I: Rasterization</h2>
+
+<h3 align="middle">Part 1: Rasterizing single-color triangles</h3>
+
+<p>To rasterize a triangle, we go through each pixel within the triangle bounding box, and then perform the 3-line test on the center of the pixel (flooring the coordinates and adding 0.5). If the center point lies within the triangle, or if it doesn’t lie “inside” any of the lines (and thus inverted), we continue with rasterizing the point (calling the rasterize_point function). 
+  Our algorithm is no worse than one that checks each sample within the bounding box of the triangle because we only check pixels within the range of the min and max x coordinates and min and max y coordinates. This keeps the check within the bounding box of the triangle.</p>  
+
+<div align="middle">
+  <table style="width=100%">
+    <tr>
+      <td>
+        <img src="images/task1.png" align="middle" width="400px"/>
+        <figcaption align="middle">screenshot of basic/test4.svg with the default viewing parameters.</figcaption>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<h3 align="middle">Part 2: Antialiasing triangles</h3>
+
+<p><b>Data Structures:</b> We updated the <i>sample_buffer<i/> to hold <i>height * width * sample_rate colors</i>, enabling us to store the color information of every single super sample. </p>
+<p><b>Our supersampling algorithm is as follows:</b></p>
+<p><ol>
+  <li>In <i>rasterize_triangle<,i>, we scale the original image by <i>sqrt(sample_rate)</i> pixels in each axis so the coordinates match the image if it were the high resolution version. Then we conduct the 3 line test for each pixel’s n=<i>sample_rate</i> sections (essentially sampling (3 line test) as usual but with the scaled image). If the pixel’s subsection passes the 3 line test, fill the color into the sample buffer’s high resolution location (index into the <i>sample_buffer</i> as if it were a matrix)</li>
+  <li>Since only <i>rasterize_triangle</i> had supersampling, we edited <i>fill_pixel</i> to supersample for when <i>rasterize_line</i> or <i>rasterize_point</i> is called. We had to adjust for how the lines and points were being rasterized through the <i>sample_buffer</i> since we were not implementing supersampling those. The default <i>fill_pixel</i> used to directly map 1 pixel from <i>rasterize_line</i> or <i>rasterize_point</i> to a single pixel in the <i>sample_buffer</i>. However, if the <i>sampling_rate</i> is now greater than 1 and we resize the <i>sample_buffer</i>, 1 pixel in <i>rasterize_line</i> or <i>rasterize_point</i> actually maps to <i>sample_rate</i> number of pixels in the <i>sample_buffer</i>, so <i>fill_pixel</i> correctly fills in all the necessary pixels based on the sampling rate.</li> 
+  <li>Then in <i>resolve_to_framebuffer</i>, we need to map our supersampled pixels back into the single pixel that actually maps to the <i>framebuffer</i>. To do this, we iterate over the pixels of the <i>framebuffer</i> and pick out the <i>sample_rate</i> number of pixels in the <i>sample_buffer</i> associated with the pixel. We then average the color of all these subsamples to set the pixel color of the <i>framebuffer</i>.</li>
+  </ol></p>
+<p>For lines and points supersampling won’t change anything since supersampling is not implemented (i.e. all subsamples are the same color), but supersampling is useful for toning down jaggies and any aliasing. It allows more consideration of the fact that the one part of the pixel you sample might not reflect the entire pixel’s color. We use supersampling to antialias the triangles because for pixels with a small part of the triangle edge in it (and thus missed by the center point sampling), it allows for the small part of the triangle that is in the pixel to be considered into the color of the pixel.</p>
+<p><b>Modifications to pipeline:</b>
+  <ul>
+    <li>Step 3: Rasterizing the triangles for the interior image will supersample based on the sample rate into a <i>sample_buffer</i> that may be resized so not all pixels of the original pixel may map to the same color. We also did not use the original <i>fill_pixel</i> function given when implementing supersampling.</li>
+    <li>Step 4: When rasterizing the square boundary, since lines are being rasterized, the <i>sample_buffer</i> in between may map multiple pixels if the sample is greater than 1 but this does not have any effect on the actual <i>framebuffer</i> since they are averaged out again.</li>
+    <li>Step 5: Based on the <i>sample_rate</i> increasing, it is no longer a 1:1 mapping, so instead of directly mapping the <i>sample_buffer</i> pixels to the <i>framebuffer</i> pixels, colors of the <i>sample_buffer</i> are averaged and then the <i>framebuffer</i> takes on the average color of the supersampled pixels.</li>
+  </ul>
+</p>
+  
+<div align="middle">
+  <table style="width=100%">
+    <tr>
+      <td>
+        <img src="images/task2_1.png" align="middle" width="400px"/>
+        <figcaption align="middle">screenshot of basic/test4.svg with the default viewing parameters and sample rate 1.</figcaption>
+      </td>
+      <td>
+        <img src="images/task2_4.png" align="middle" width="400px"/>
+        <figcaption align="middle">screenshot of basic/test4.svg with the default viewing parameters and sample rate 4.</figcaption>
+      </td>
+      <td>
+        <img src="images/task2_16.png" align="middle" width="400px"/>
+        <figcaption align="middle">screenshot of basic/test4.svg with the default viewing parameters and sample rate 16.</figcaption>
+      </td>
+    </tr>
+  </table>
+</div>
+<p>The results from <i>sample_rate</i> 1, 4, and 16 show less extreme jaggies each time you increase the <i>sample_rate</i>. In the zoomed in portion, we can see different shades of the original color (from the supersampling and averaging) on the border once the <i>sample_rate</i> is greater than 1, and comparing <i>sample_rate</i> 4 and 16 we can see a larger variation in shades of the original color with <i>sample_rate</i> of 16. These extra variations of color let the border seem smoother when looking at the image from farther away.</p>
+
+
+<h3 align="middle">Part 3: Transforms</h3>
+<p>We gave our cubeman a fancy shirt and a hat, and had him dance with one arm up and one arm down, picking up one leg, bent at the knee.</p>
+
+
+<h2 align="middle">Section II: Sampling</h2>
+
+<h3 align="middle">Part 4: Barycentric coordinates</h3>
+
+  <p>Barycentric coordinates linearly interpolate values at triangle vertices, assigning weights for each triangle vertex based on which point you are interpolating for (also could be considered proportion calculation). For any point, you can calculate weights of triangle vertices such that alpha, beta, and gamma sum up to 1. This is useful for creating color blends and gradients. 
+  For example, if you look at the image aid of the triangle below, for each point inside the triangle, after calculating the weight for each vertex/color (red, green, and blue) and by combining the weighted colors together, you can get a color that is a gradient between the 3 vertices. In this case, point V has more green and blue in it, and less red, and which will be reflected in the three corresponding alpha, beta, and gamma weights.</p>
+  
+ <div align="middle">
+  <table style="width=100%">
+    <tr>
+      <td>
+        <img src="images/task4_helper.png" align="middle" width="400px"/>
+        <figcaption align="middle">barycentric coordinates image aid.</figcaption>
+      </td>
+      <td>
+        <img src="images/task4.png" align="middle" width="400px"/>
+        <figcaption align="middle">screenshot of svg/basic/test7.svg with default viewing parameters and sample rate 1.</figcaption>
+      </td>
+    </tr>
+  </table>
+</div> 
+
+<h3 align="middle">Part 5: "Pixel sampling" for texture mapping</h3>
+
+
+<h3 align="middle">Part 6: "Level sampling" with mipmaps for texture mapping</h3>
+
+
+
+<h2 align="middle">Section III: Art Competition</h2>
+<p>If you are not participating in the optional art competition, don't worry about this section!</p>
+
+<h3 align="middle">Part 7: Draw something interesting!</h3>
+
+</body>
 </html>
