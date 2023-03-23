@@ -1,7 +1,684 @@
-<html>
-	<head>
-	</head>
-	<body>
-		Project 3-2 here
-	</body>
-</html>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>CS 184: Computer Graphics and Imaging, Spring 2023</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-opaquegray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="93a635aa-39d2-4db6-8ff9-bd3e01b4871e" class="page sans"><header><img class="page-cover-image" src="images/Untitled_drawing.png" style="object-position:center 91.10000000000001%"/><h1 class="page-title">CS 184: Computer Graphics and Imaging, Spring 2023</h1></header><div class="page-body"><p id="8b0ca9e1-cac7-4209-9db5-0e2b9187e167" class="">
+</p><h1 id="35c67e84-b042-4502-b6e5-7b45bbfeb8f4" class="">Project 3-2: Path Tracer</h1><h2 id="e1a6e93d-58e6-4568-8ca1-61d27597f6a3" class="">Srisai Nachuri, Maddy Chen</h2><p id="823ac819-06c8-4125-b238-3a92a53965de" class="">
+</p><h2 id="3b7ecaad-73eb-4e1a-a391-823f2b205dd1" class="">Overview</h2><p id="b9297c35-680a-404d-ba8e-766b17e51c68" class="">In this project, we chose to complete parts 2 and 4. In part 2, We were able to render materials that were glossy and specular by implementing the microfacet BRDF; materials that are isotropic rough conductors that only reflect (and not refract). In part 4, instead of the pinhole camera lens model from project 3-1, we simulated a thin lens model. This allowed us to implement camera setting adjustments, such as creating a depth of field effect by modifying the camera’s focal distance and changing the aperture/lens size. We encountered one bug where we did not have our camera-to-world conversion in the right steps, so we had an upside-down image at one point, but later fixed it by working through which values were in camera space and which were in world space and when we needed to convert from camera space to world space.</p><p id="1e68ced3-23e8-4f71-9ce5-48c39cf114ff" class="">
+</p><h2 id="4b794e39-d5a5-4771-89e2-f1d53ba96b89" class=""><strong>Part 2: Microfacet Material</strong></h2><p id="467328a2-639d-464f-9a22-9924a0ca4de2" class="">Building off of Part 3-1, in this part we implement the BSDF for the microfacet model based on rough, reflective surfaces. The overall BSDF function is given below and sampled in our ray tracer:</p><p id="027127b8-ae85-49e4-b2c0-bd1170cad065" class=""> </p><figure id="9af398cd-c9a1-4345-b9b6-49a2360e94ba" class="image"><a href="images/Untitled.png"><img style="width:384px" src="images/Untitled.png"/></a></figure><p id="cbaf2c18-0392-48b1-b6ed-f126a3fbcf16" class="">There are three main parts to this equation. The first, <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>F</mi><mo stretchy="false">(</mo><msub><mi>w</mi><mi>i</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">F(w_i)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">F</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span><span>﻿</span></span>, is the Fresnel term, which is based on the specific properties of our rough, conductive surfaces. </p><figure id="fa18b9d0-64e4-458c-8788-f095d73b6e67" class="image"><a href="images/Untitled%201.png"><img style="width:506px" src="images/Untitled%201.png"/></a></figure><p id="8165b46b-ef60-42ed-b03e-966408094f91" class="">We compute <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>θ</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">\theta_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.84444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02778em;">θ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.02778em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span> as the angle between <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>w</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">w_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span> and the normal vector, and then the constants <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>η</mi></mrow><annotation encoding="application/x-tex">\eta</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">η</span></span></span></span></span><span>﻿</span></span> and <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span></span></span></span></span><span>﻿</span></span> are indices of refraction for conductors. For our initial demos, we use the indices for gold. Furthermore, we would ideally compute these indices at every wavelength of light, but for simplicity, <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>η</mi></mrow><annotation encoding="application/x-tex">\eta</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">η</span></span></span></span></span><span>﻿</span></span> and <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span></span></span></span></span><span>﻿</span></span> are 3-dimensional vectors for refractivity indices at red (614 nm), green (549 nm), and blue (466 nm).</p><p id="ebf432a6-d3bd-493f-8090-d36fb7bbdddd" class="">The next term, <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi><mo stretchy="false">(</mo><mi>h</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">D(h)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">D</span><span class="mopen">(</span><span class="mord mathnormal">h</span><span class="mclose">)</span></span></span></span></span><span>﻿</span></span> is a normal distribution function to describe how the microfacets’ normals are distributed, that is formulated from the Beckmann distribution. </p><p id="091a845c-90fa-41f1-be80-7e68dfd2ddd4" class=""> </p><figure id="03439d63-5e0c-4a48-a4e4-296e7020f9bc" class="image"><a href="images/Untitled%202.png"><img style="width:272px" src="images/Untitled%202.png"/></a></figure><p id="71bb70b5-4268-4bad-9291-b6c41761363a" class="">This term varies by the value α, which corresponds to the roughness of the material. The rougher the material, the less shiny it becomes, as the surface will become more diffuse. A smaller alpha will generate a more glossy and specular material, meaning that there are more reflections of light on that material. </p><p id="72a3bd39-8b9e-469a-b5e6-82de864b4371" class="">Lastly, <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>G</mi><mo stretchy="false">(</mo><msub><mi>w</mi><mi>o</mi></msub><mo separator="true">,</mo><msub><mi>w</mi><mi>i</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">G(w_o, w_i)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">G</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">o</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span><span>﻿</span></span> is the shadow masking term, which we did not need to implement ourselves. </p><p id="b8b56678-7baf-4f6e-874f-eefa9b34b923" class="">
+</p><p id="eee13146-1dc0-491f-ad5e-49dba31e8f21" class=""><em>Show a screenshot sequence of 4 images of scene </em><em><code>CBdragon_microfacet_au.dae</code></em><em> rendered with α set to 0.005, 0.05, 0.25 and 0.5. The other settings should be at least 128 samples per pixel and 1 samples per light. The number of bounces should be at least 5. Describe the differences between different images. Note that, to change the α, just open the .dae file and search for </em><em><code>microfacet</code></em><em>.</em></p><p id="04ccc5ba-212d-45a2-93ef-730b11941d5e" class="">In the sequence of images below, we render the dragon with the refractivity of gold at various α values. As the α value gets larger, the microfacet material becomes less glossy, since alpha denotes the roughness of the material. For our dragon, the α = 0.005 is the most specular and α = 0.5 is the least specular and the properties of the “roughness” are more apparent.  </p><p id="f95e0797-a79d-4b16-839f-eca107f49a11" class="">The following images were rendered with 256 samples per pixel, 1 sample per area light, a <code>max_ray_depth</code> of 7, and the <em>α</em> value adjusted accordingly. (<em>./pathtracer -s 256 -l 1 -m 7 -r 640 480 ../dae/sky/CBdragon_microfacet_au.dae</em>)</p><div id="41e60b0f-8953-4961-8b14-d7c265401430" class="column-list"><div id="6eca4109-b362-417a-ac07-d71351ce4ecf" style="width:50%" class="column"><figure id="93cd0c39-d0f8-4428-bd06-59e94ebffe6f" class="image"><a href="images/Untitled%203.png"><img style="width:640px" src="images/Untitled%203.png"/></a><figcaption>α = 0.005</figcaption></figure><figure id="c5ed71af-cc6b-4b6d-8706-7979e770b7f2" class="image"><a href="images/Untitled%204.png"><img style="width:640px" src="images/Untitled%204.png"/></a><figcaption>α = 0.25</figcaption></figure></div><div id="2dd36289-3c3b-4d13-a25b-36bc438622cf" style="width:50%" class="column"><figure id="245b3389-b025-4f5a-8185-a5639874a009" class="image"><a href="images/Untitled%205.png"><img style="width:640px" src="images/Untitled%205.png"/></a><figcaption>α = 0.05</figcaption></figure><figure id="97b569cc-d0b0-41a6-8e55-8a03fd9ad7a7" class="image"><a href="images/Untitled%206.png"><img style="width:640px" src="images/Untitled%206.png"/></a><figcaption>α = 0.5</figcaption></figure></div></div><p id="e0f7d9db-0da8-4496-9af4-8e89f7b0ed46" class="">
+</p><p id="b4529e58-275b-4768-b75f-c62ff1c1b6b6" class=""><em>Show two images of scene </em><em><code>CBbunny_microfacet_cu.dae</code></em><em> rendered using cosine hemisphere sampling (default) and your importance sampling. The sampling rate should be fixed at 64 samples per pixel and 1 samples per light. The number of bounces should be at least 5. Briefly discuss their difference.</em></p><p id="c081530f-b715-4b65-8352-64d342703b27" class="">In the images below, the cosine hemisphere sampling method on the left is a lot noisier than the importance sampling method on the right. While cosine hemisphere sampling is good for diffuse BRDFs, in our case, it doesn’t match well with the Beckmann distribution we implemented for computing the <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi><mo stretchy="false">(</mo><mi>h</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">D(h)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">D</span><span class="mopen">(</span><span class="mord mathnormal">h</span><span class="mclose">)</span></span></span></span></span><span>﻿</span></span> term. As a result, the cosine hemisphere sampling does not converge with our given samples in many parts of the rendered image. </p><p id="63bef251-397a-476c-84ca-27398350af35" class="">Instead, we importance sample the BRDF <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>F</mi></mrow><annotation encoding="application/x-tex">F</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">F</span></span></span></span></span><span>﻿</span></span> in accordance with the Beckmann distribution, which results in a less noisy, better-converging rendering on the right. </p><p id="fb0895da-2aaa-4d5c-94ca-9ad53fb66e81" class="">The following images were rendered with 64 samples per pixel, 1 sample per area light, a <code>max_ray_depth</code> of 7, and the <em>α</em> value adjusted accordingly (<em>./pathtracer -s 64 -l 1 -m 7 ../dae/sky/CBbunny_microfacet_cu.dae</em>)</p><div id="7aa23b67-19d4-40a5-8823-00de8b7d2473" class="column-list"><div id="3cfa2ff4-68fd-4a11-87d0-fcdad1c2a892" style="width:50%" class="column"><figure id="597d7452-dead-4d39-b019-ae39a8213290" class="image"><a href="images/Untitled%207.png"><img style="width:800px" src="images/Untitled%207.png"/></a><figcaption>cosine hemisphere sampling</figcaption></figure></div><div id="3bc68fda-2cfa-4017-b93f-1bd69ba296b8" style="width:50%" class="column"><figure id="c7a98476-72ef-4179-ab24-5a44d35b7617" class="image"><a href="images/Untitled%208.png"><img style="width:800px" src="images/Untitled%208.png"/></a><figcaption>importance sampling</figcaption></figure></div></div><p id="7ec62e5a-8004-440c-8783-987c02bdb449" class="">
+</p><p id="ac149574-c311-481b-8938-d46b01795c34" class=""><em>Show at least one image with some other conductor material, replacing </em><em><code>eta</code></em><em> and </em><em><code>k</code></em><em>. Note that you should look up values for real data rather than modifying them arbitrarily. Tell us what kind of material your parameters correspond to.</em></p><p id="75dbefda-95b0-4257-92b3-f047e1ef437e" class="">We chose to render the dragon with Vanadium and Titanium materials. To get the eta and k values, we selected the element from <a href="https://refractiveindex.info/">this resource</a> that provides refraction indices for different materials at various wavelengths and checked the eta and k values for the red, green, and blue values at fixed wavelengths of light (614 nm for red light, 549 nm for green light, and 466 nm for blue light).</p><p id="a2d9f99e-d6c3-422f-bdae-c911cae1adf5" class="">The following images were rendered with 256 samples per pixel, 1 sample per area light, a <code>max_ray_depth</code> of 7, and alpha = 0.25.</p><div id="40a1e78e-e2d6-4403-a864-54f6227965d8" class="column-list"><div id="6b34c136-d825-414d-b72a-aad2bb5447db" style="width:50%" class="column"><figure id="6fd3f4d7-2b6b-40be-881a-5f3a03ba37de" class="image"><a href="images/Untitled%209.png"><img style="width:640px" src="images/Untitled%209.png"/></a><figcaption>Vanadium (V): eta = &lt;3.5649 4.0000 3.7550&gt;, k = &lt;3.0183 3.0400 3.4000&gt;</figcaption></figure></div><div id="fb57e2c4-5b8c-43a6-af47-d10461f9c27b" style="width:50%" class="column"><figure id="c6e4d04a-c6c8-4719-996c-995b58332765" class="image"><a href="images/out.png"><img style="width:640px" src="images/out.png"/></a><figcaption>Titanium (Ti): eta = &lt;2.6640 2.5400 2.3075&gt;, k = &lt;3.7080 3.4300 3.0850&gt;</figcaption></figure></div></div><p id="c5646cd2-cec7-4866-90fe-7c9dc8d052a8" class="">
+</p><h2 id="6a8a59d8-6f19-46fb-9d2c-fb9dd38b0461" class=""><strong>Part 4: Depth of Field</strong></h2><p id="bfd2ea4a-953d-46e5-b380-75e7450e41d3" class=""><em>In a few sentences, explain the differences between a pinhole camera model and a thin-lens camera model.</em></p><p id="0748a593-f4c1-40bd-bb10-63ee8616c05f" class="">In a pinhole camera model, everything is in focus, whereas in the thin-lens camera model, the focus is based on the camera’s <code>focalDistance</code>. This is because we assume the thin-lens camera model refracts light like a lens. In a pinhole camera model, the light goes straight through the pinhole point as shown by the red ray in the diagram below, so light reflecting off of any point in a scene can only enter the camera through a single direction. The radiance is only sampled from the center of the lens. </p><p id="55cb3deb-4440-4aa4-8479-a195fdc6b0e6" class="">In a thin-lens camera, we allow sampling through multiple points on the lens, based on our set lens radius. With a non-zero lens radius, only objects in our scene at a certain distance appear in focus since their right rays still refract to the same point, whereas the foreground and background appear blurry since their light rays do not converge. The point of focus can be changed via the <code>focalDistance</code>. </p><p id="3de118b6-0aef-4de9-8251-9f3e4f4ba471" class="">
+</p><figure id="6e382cfe-2b2d-411d-90f6-2d5449788354" class="image"><a href="images/Untitled%2010.png"><img style="width:480px" src="images/Untitled%2010.png"/></a><figcaption>Thin-lens camera model and pinhole camera model, CS184 project 3-2 spec</figcaption></figure><p id="17cdc72e-04ef-4d69-a926-1b1d7fc92581" class="">
+</p><p id="4232e8ae-3034-4a9e-ab13-5dfd1e5a2d1c" class=""><em>Show a &quot;focus stack&quot; where you focus at 4 visibly different depths through a scene. Make sure to include all screenshots.</em></p><p id="6eafcb1a-4d34-4485-a6ff-f41aae80b0b7" class="">In the sequence of images below, we adjusted the -d parameter, which changes the depths through a scene, otherwise known as the <code>focalDistance</code>. The <code>focalDistance</code> determines which parts of the scene are in focus. In the first image, the very back corner of the Cornell Box is in focus, and the rest of the dragon and Cornell Box (which is closer to the camera than the back corner) is out of focus. As the <code>focalDistance</code> (depth d value) decreases, the point of focus on the scene shifts more to the foreground (closer to the camera); first, the dragon’s tail is in focus, then the center of its body, until the <code>focalDistance</code> is close enough where the mouth of the dragon is the point in focus for the scene.</p><p id="b9d3b66e-7f2b-45b3-ab19-a531028008f6" class="">The following images were rendered with the command <em>./pathtracer -t 8 -s 512 -a 64 0.05 -r 640 480 -m 12 -l 4 -b 0.23 -d 4.5 ../dae/sky/CBdragon_microfacet_au.dae</em>, with the -d parameter adjusted accordingly.</p><div id="654d2cc3-25cd-4c24-aa5e-b56dae68aa26" class="column-list"><div id="dd5038e8-9a6f-4191-bbac-21ff1a3571f7" style="width:33.333333333333336%" class="column"><figure id="66d2f89b-dd53-40cd-9c2c-1c0461ee0145" class="image"><a href="images/Untitled%2011.png"><img style="width:640px" src="images/Untitled%2011.png"/></a><figcaption>d = 4.5</figcaption></figure></div><div id="570bd147-d3b9-4252-b4a6-de29eb65e42c" style="width:33.333333333333336%" class="column"><figure id="ea05883f-e36b-4780-9007-eda683d95a10" class="image"><a href="images/Untitled%2012.png"><img style="width:640px" src="images/Untitled%2012.png"/></a><figcaption>d = 3.5</figcaption></figure></div><div id="83d92ed3-9ba8-48ad-ac7c-f12c8ccee5cf" style="width:33.33333333333333%" class="column"><figure id="0dcd9851-9c4e-4c28-9d80-188c437170b7" class="image"><a href="images/Untitled%2013.png"><img style="width:640px" src="images/Untitled%2013.png"/></a><figcaption>d = 3.3</figcaption></figure></div></div><div id="4d43b148-ef82-4278-adf2-bf3d97e5764a" class="column-list"><div id="99bcbdce-cdd3-41d6-b552-c6691cba9007" style="width:50%" class="column"><figure id="54ced295-a066-47a7-90c8-ec5a62304ccb" class="image"><a href="images/Untitled%2014.png"><img style="width:640px" src="images/Untitled%2014.png"/></a><figcaption>d = 3.1</figcaption></figure></div><div id="748cde37-0b0e-4716-be01-2f51f5200b7b" style="width:50%" class="column"><figure id="0d22bc5e-ef48-4218-b318-037408ecc65c" class="image"><a href="images/Untitled%2015.png"><img style="width:640px" src="images/Untitled%2015.png"/></a><figcaption>d = 2.9</figcaption></figure></div></div><p id="81422e56-901f-48cf-b3ad-0e287bd01f47" class="">
+</p><p id="632e5cbc-5d5e-4088-9a51-6bf2ee5d59ca" class=""><em>Show a sequence of 4 pictures with visibly different aperture sizes, all focused at the same point in a scene. Make sure to include all screenshots.</em></p><p id="bf33154e-2e49-4891-9c12-4e58da83b154" class="">As the lens radius increases, more light rays are able to pass through the lens. This means that the light will be coming from multiple sources and directions, meaning that there is less convergence (and thus more blur in many areas of the scene). In the sequence of images below, you can see that as the lens radius increases, more of the scene becomes out of focus, compared to the smaller lens and default pinhole camera images.</p><p id="f033610d-12e4-4ad6-800e-e26420cabe5f" class="">The following images were rendered with the command<em> ./pathtracer -t 8 -s 512 -a 64 0.05 -r 640 480 -m 12 -l 4 -b 0.23 -d 4.5 ../dae/sky/CBdragon_microfacet_au.dae</em>, with the -b parameter adjusted accordingly. </p><figure id="f53fde21-a9f8-40ee-9bd4-e7f90a64e3a2" class="image"><a href="images/CBdragon_microfacet_au_screenshot_3-22_17-6-23.png"><img style="width:624px" src="images/CBdragon_microfacet_au_screenshot_3-22_17-6-23.png"/></a><figcaption>Camera lens radius b = 0 (pinhole camera default)</figcaption></figure><div id="dffd8c3a-1c9c-4ffb-a338-7efa6c5f4e5a" class="column-list"><div id="be076336-0595-468b-9c3a-35c777304406" style="width:50%" class="column"><figure id="537cfa34-94e7-4971-a37e-93a0863a4de5" class="image"><a href="images/CBdragon_microfacet_au_screenshot_3-22_1-7-54.png"><img style="width:1280px" src="images/CBdragon_microfacet_au_screenshot_3-22_1-7-54.png"/></a><figcaption>Camera lens radius b = 0.18</figcaption></figure><p id="052ec9ae-9c50-4ece-80d6-c1573ca4d915" class="">
+</p><figure id="3f1103ab-9dcb-40f8-bd4c-acea3e4c0cde" class="image"><a href="images/CBdragon_microfacet_au_screenshot_3-22_12-21-0.png"><img style="width:1280px" src="images/CBdragon_microfacet_au_screenshot_3-22_12-21-0.png"/></a><figcaption>Camera lens radius b = 0.43</figcaption></figure><p id="e951a2b1-2b1a-4025-8b65-c4fc8564d8e6" class="">
+</p></div><div id="1cd1b953-2abd-4aba-9253-af9a35a90ea6" style="width:50%" class="column"><figure id="a03c9a4a-3242-49dc-b48c-f53600162811" class="image"><a href="images/CBdragon_microfacet_au_screenshot_3-22_0-10-53.png"><img style="width:1280px" src="images/CBdragon_microfacet_au_screenshot_3-22_0-10-53.png"/></a><figcaption>Camera lens radius b = 0.23</figcaption></figure><p id="ecbf8a91-dc4c-4b2d-a489-cd3ff7057339" class="">
+</p><figure id="882fbf35-5447-4ef6-9a06-db8b931f909f" class="image"><a href="images/CBdragon_microfacet_au_screenshot_3-22_15-57-52.png"><img style="width:1280px" src="images/CBdragon_microfacet_au_screenshot_3-22_15-57-52.png"/></a><figcaption>Camera lens radius b = 0.83</figcaption></figure></div></div><p id="e4abdde0-bea5-4f85-b474-325d3286c737" class="">
+</p><p id="d5d0b202-73b5-486a-85e5-775178c1b51e" class=""><em>At the end, if you worked with a partner, please write a short paragraph together for your final report that describes how you collaborated, how it went, and what you learned.</em></p><p id="2e070d64-8980-4883-81e1-f6a003a19b98" class="">This was a really fun and fulfilling project! We worked as partners on this project and overall, our workflow was very smooth. We generally did all the code together with one person actively compiling/building and allowing the other person to write code through Visual Studio live share. For remote work sessions, we also used Zoom to allow the other person to see the renderings as they were created. Overall, working on code together instead of a divide and conquer approach allowed us to fully understand the concepts, easily debug code the other person was writing, and be on the same page with our designs/algorithms. We learned a lot about cameras and different materials in the project.</p><p id="88f548ff-aa36-4c7a-b7c3-1d23d5534740" class="">
+</p><p id="279d11ac-c904-4dd4-a9d9-79b6d1a79dfa" class="">Website link: <a href="https://srisainachuri.github.io/cs184-project-portfolio/proj3-2/index.html">https://srisainachuri.github.io/cs184-project-portfolio/proj3-2/index.html</a></p></div></article></body></html>
